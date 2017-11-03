@@ -21,7 +21,7 @@
 #define TKCase 21
 #define TKDefault 22
 #define TKMaior 23
-#define TKMenor 23
+#define TKMenor 24
 
 #include <string.h>
 #include <stdio.h>
@@ -42,7 +42,6 @@ struct pal_res lista_pal[] = {
 	{"int", TKInt},
 	{"float", TKFloat},
 	{"char", TKChar},
-	{"fimtabela", TKId},
 	{"while", TKWhile},
 	{"do", TKDo},
 	{"for", TKFor},
