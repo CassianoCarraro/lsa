@@ -46,6 +46,13 @@
 #define TK_DOUBLE 45
 #define TK_CONST 46
 
+#define TK_BITWISE_E 47
+#define TK_BITWISE_OU 48
+#define TK_BITWISE_XOU 49
+#define TK_BITWISE_COMPL 50
+#define TK_BITWISE_ESQ 51
+#define TK_BITWISE_DIR 52
+
 #define TOKENS "TK_VIRGULA", \
 "TK_ABRE_PAR", \
 "TK_FECHAR_PAR", \
@@ -91,7 +98,13 @@
 "TK_INT", \
 "TK_FLOAT", \
 "TK_DOUBLE", \
-"TK_CONST"
+"TK_CONST", \
+"TK_BITWISE_E", \
+"TK_BITWISE_OU", \
+"TK_BITWISE_XOU", \
+"TK_BITWISE_COMPL", \
+"TK_BITWISE_ESQ", \
+"TK_BITWISE_DIR"
 
 #define TAB_SIZE 4
 
@@ -103,7 +116,7 @@
 int pos = 0;
 int linha = 1;
 int coluna = 1;
-char exp1[500], lex[20];
+char exp1[600], lex[20];
 int tk;
 
 struct pal_res {
@@ -200,6 +213,8 @@ int le_token(char st[], char lex[]) {
 					else if (c == '!' && proxC == '=') {addLex(&lex, &posl, proxC);	return TK_DIFERENTE;}
 					else if (c == '&' && proxC == '&') {addLex(&lex, &posl, proxC); return TK_E;}
 					else if (c == '|' && proxC == '|') {addLex(&lex, &posl, proxC); return TK_OU;}
+					else if (c == '<' && proxC == '<') {addLex(&lex, &posl, proxC); return TK_BITWISE_ESQ;}
+					else if (c == '>' && proxC == '>') {addLex(&lex, &posl, proxC); return TK_BITWISE_DIR;}
 					else {
 						voltaPos(2);
 						c = st[pos];
@@ -231,6 +246,10 @@ int le_token(char st[], char lex[]) {
 				if(c=='>'){lex[posl]='\0';avancaPos();return TK_MAIOR;}
 				if(c=='<'){lex[posl]='\0';avancaPos();return TK_MENOR;}
 				if(c=='!'){lex[posl]='\0';avancaPos();return TK_NEGACAO;}
+				if(c=='&'){lex[posl]='\0';avancaPos();return TK_BITWISE_E;}
+				if(c=='|'){lex[posl]='\0';avancaPos();return TK_BITWISE_OU;}
+				if(c=='^'){lex[posl]='\0';avancaPos();return TK_BITWISE_XOU;}
+				if(c=='~'){lex[posl]='\0';avancaPos();return TK_BITWISE_COMPL;}
 				if(c==' ' || c == '\t' || c == '\n') {avancaPos();posl--;incrementaLina(c);break;}
 				if(c=='\0') {
 					return -1;
@@ -262,7 +281,7 @@ int le_token(char st[], char lex[]) {
 }
 
 void lexical() {
-	char token_desc[47][16] = {TOKENS};
+	char token_desc[52][17] = {TOKENS};
 	FILE *fp;
 	fp = fopen("Saida.lex", "w");
 	char buffer[50];
@@ -272,7 +291,7 @@ void lexical() {
 	printf("\n=======================================================\n");
 
 	while((tk = le_token(exp1, lex)) > 0) {
-		sprintf(buffer, "%16s \t %10s \t %d \t %d\n", token_desc[tk-1], lex, linha, obterColuna());
+		sprintf(buffer, "%16s \t %10s \t %2d \t %2d\n", token_desc[tk-1], lex, linha, obterColuna());
 		printf("%s", buffer);
 		fwrite(buffer, strlen(buffer), 1, fp);
 		file_pos += strlen(buffer);
@@ -284,7 +303,7 @@ void lexical() {
 int main() {
 	FILE *fp;
 	fp = fopen("program.c", "r");
-	fread(exp1, 1, 500, fp);
+	fread(exp1, 1, 600, fp);
 	printf("Programa\n=======================================================\n%s \n=======================================================\n", exp1);
 
 	lexical();

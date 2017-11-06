@@ -14,6 +14,12 @@ int main() {
 	f /= 1;
 	f *= 1;
 	f %= 1;
+	f = a & b;
+	f = a | b;
+	f = a ^ b;
+	f = ~a;
+	f = a << 2;
+	f = a >> 2;
 
 	while(a != 0) {
 		continue;
@@ -21,6 +27,14 @@ int main() {
 
 	do {
 	} while(a > 0);
+
+	for (int i = 0; i < 10; ++i) {
+		break;
+	}
+
+	for (; ; ) {
+		break;
+	}
 
 	if (a == e && b != c) {
 	} else if (a == 0 || a <= 0 || a >= 0) {
@@ -33,4 +47,6 @@ int main() {
 		default:
 		break;
 	}
+
+	main();
 }
