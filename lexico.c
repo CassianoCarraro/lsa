@@ -187,7 +187,7 @@ void addLex(char **lex, int *pos, char c) {
 }
 
 int le_token(char st[], char lex[]) {
-	int estado = 0, posl = 0, fim = 0, constante = 0;
+	int estado = 0, posl = 0, fim = 0, constante = 0, decimalPoints = 0;
 
 	while (!fim) {
 		char c = st[pos];
@@ -220,11 +220,15 @@ int le_token(char st[], char lex[]) {
 						c = st[pos];
 					}
 				}
-
-				if(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c == '_' || c >= '0' && c <= '9') {
+				if(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c == '_' || c >= '0' && c <= '9' || c == '.' && (st[pos+1] >= '0' && st[pos+1] <= '9')) {
 					avancaPos();
 					estado = 1;
-					constante = (c >= '0' && c <= '9');
+					if(c >= '0' && c <= '9' || c == '.') {
+						constante = 1;
+						if(c == '.') {
+							decimalPoints++;
+						}
+					}
 
 					break;
 				}
@@ -255,15 +259,23 @@ int le_token(char st[], char lex[]) {
 					return -1;
 				}
 
-				printf("Erro lexico: encontrou o caracter %c na lina: %d, coluna: %d\n", c, linha, coluna);
+				printf("Erro lexico: encontrou o caracter %c na linha: %d, coluna: %d\n", c, linha, coluna);
 
 				return -1;
 			case 1:
-				if(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c == '_' || c >= '0' && c <= '9') {
+				if(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c == '_' || c >= '0' && c <= '9' || c == '.') {
 					avancaPos();
 
-					if (constante) {
-						constante = (c >= '0' && c <= '9');
+					if(constante) {
+						constante = (c >= '0' && c <= '9' || c == '.');
+						if(c == '.') {
+							if(decimalPoints > 0) {
+								printf("Erro lexico: muitos pontos decimais em um numero, linha: %d, coluna: %d\n", linha, coluna);
+								return -1;
+							} else {
+								decimalPoints++;
+							}
+						}
 					}
 
 					break;
@@ -271,7 +283,7 @@ int le_token(char st[], char lex[]) {
 
 				lex[--posl] = '\0';
 
-				if (constante) {
+				if(constante) {
 					return TK_CONST;
 				} else {
 					return palavra_reservada(lex);

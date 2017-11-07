@@ -21,6 +21,10 @@ int main() {
 	f = a << 2;
 	f = a >> 2;
 
+	cst = 123.45;
+	cst = .1;
+	cst = 1.;
+
 	while(a != 0) {
 		continue;
 	}
