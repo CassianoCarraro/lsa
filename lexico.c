@@ -308,6 +308,8 @@ void lexical() {
 		fwrite(buffer, strlen(buffer), 1, fp);
 		file_pos += strlen(buffer);
 	}
+	fflush(fp);
+	fclose(fp);
 
 	printf("\n=======================================================\n");
 }
@@ -319,4 +321,6 @@ int main() {
 	printf("Programa\n=======================================================\n%s \n=======================================================\n", exp1);
 
 	lexical();
+	fclose(fp);
+	system("pause");
 }
