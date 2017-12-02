@@ -6,7 +6,7 @@
 int main() {
 	char *exp = (char *) malloc(sizeof(char) * 600);
 	char *lex = (char *) malloc(sizeof(char) * 20);
-	char token_desc[52][17] = {TOKENS};
+	char token_desc[53][17] = {TOKENS};
 	char buffer[50];
 	int file_pos = 0;
 

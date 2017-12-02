@@ -76,7 +76,7 @@ int parse(char *exp, char *lex, char *tk_rec) {
 	int estado = 0;
 	int reconhece = 0;
 
-	char token_desc[52][17] = {TOKENS};
+	char token_desc[53][17] = {TOKENS};
 	push(&pilha, 0);
 
 	while((tk = le_token(exp, lex)) > 0) {

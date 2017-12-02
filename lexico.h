@@ -55,6 +55,7 @@
 #define TK_BITWISE_COMPL 50
 #define TK_BITWISE_ESQ 51
 #define TK_BITWISE_DIR 52
+#define TK_RETURN 53
 
 #define TOKENS "TK_VIRGULA", \
 "TK_ABRE_PAR", \
@@ -107,7 +108,8 @@
 "TK_BITWISE_XOU", \
 "TK_BITWISE_COMPL", \
 "TK_BITWISE_ESQ", \
-"TK_BITWISE_DIR"
+"TK_BITWISE_DIR", \
+"TK_RETURN"
 
 #define TAB_SIZE 4
 
@@ -135,7 +137,8 @@ struct pal_res lista_pal[] = {
 	{"void", TK_VOID},
 	{"int", TK_INT},
 	{"float", TK_FLOAT},
-	{"double", TK_DOUBLE}
+	{"double", TK_DOUBLE},
+	{"return", TK_RETURN}
 };
 
 int le_token(char st[], char lex[]);
