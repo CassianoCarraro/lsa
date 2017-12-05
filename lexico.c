@@ -5,13 +5,10 @@
 #include "lexico.h"
 
 int palavra_reservada(char lex[]) {
-	int postab = 0;
-	for(int i = 0; i < (sizeof(lista_pal) / sizeof(lista_pal[0])) - 1; ++i) {
-		if (strcmp(lex, lista_pal[postab].palavra) == 0) {
-			return lista_pal[postab].tk;
+	for(int i = 0; i < (sizeof(lista_pal) / sizeof(lista_pal[0])); i++) {
+		if (strcmp(lex, lista_pal[i].palavra) == 0) {
+			return lista_pal[i].tk;
 		}
-
-		postab++;
 	}
 
 	return TK_ID;
@@ -58,7 +55,7 @@ int le_token(char st[], char lex[]) {
 
 		switch(estado) {
 			case 0:
-				if (c == '*' || c == '/' || c == '%' || c == '+' || c == '-' || c == '&' || c == '|' || c == '!' || c == '<' || c == '>') {
+				if (c == '*' || c == '/' || c == '%' || c == '+' || c == '-' || c == '&' || c == '|' || c == '!' || c == '<' || c == '>' || c == '=') {
 					avanca_pos();
 					char proxC = st[pos];
 					avanca_pos();
@@ -66,14 +63,14 @@ int le_token(char st[], char lex[]) {
 					if (c == '+' && proxC == '+') {add_lex(&lex, &posl, proxC); return TK_INCREMENTO;}
 					else if (c == '-' && proxC == '-') {add_lex(&lex, &posl, proxC); return TK_DECREMENTO;}
 					else if (c == '*' && proxC == '=') {add_lex(&lex, &posl, proxC); return TK_INCR_MULT;}
-					else if (c == '/' && proxC == '=') {add_lex(&lex, &posl, proxC);	return TK_INCR_DIV;}
-					else if (c == '%' && proxC == '=') {add_lex(&lex, &posl, proxC);	return TK_INCR_RESTO;}
-					else if (c == '+' && proxC == '=') {add_lex(&lex, &posl, proxC);	return TK_INCR_SOMA;}
-					else if (c == '-' && proxC == '=') {add_lex(&lex, &posl, proxC);	return TK_INCR_SUB;}
-					else if (c == '<' && proxC == '=') {add_lex(&lex, &posl, proxC);	return TK_MENOR_IGUAL;}
-					else if (c == '>' && proxC == '=') {add_lex(&lex, &posl, proxC);	return TK_MAIOR_IGUAL;}
+					else if (c == '/' && proxC == '=') {add_lex(&lex, &posl, proxC); return TK_INCR_DIV;}
+					else if (c == '%' && proxC == '=') {add_lex(&lex, &posl, proxC); return TK_INCR_RESTO;}
+					else if (c == '+' && proxC == '=') {add_lex(&lex, &posl, proxC); return TK_INCR_SOMA;}
+					else if (c == '-' && proxC == '=') {add_lex(&lex, &posl, proxC); return TK_INCR_SUB;}
+					else if (c == '<' && proxC == '=') {add_lex(&lex, &posl, proxC); return TK_MENOR_IGUAL;}
+					else if (c == '>' && proxC == '=') {add_lex(&lex, &posl, proxC); return TK_MAIOR_IGUAL;}
 					else if (c == '=' && proxC == '=') {add_lex(&lex, &posl, proxC); return TK_IGUAL;}
-					else if (c == '!' && proxC == '=') {add_lex(&lex, &posl, proxC);	return TK_DIFERENTE;}
+					else if (c == '!' && proxC == '=') {add_lex(&lex, &posl, proxC); return TK_DIFERENTE;}
 					else if (c == '&' && proxC == '&') {add_lex(&lex, &posl, proxC); return TK_E;}
 					else if (c == '|' && proxC == '|') {add_lex(&lex, &posl, proxC); return TK_OU;}
 					else if (c == '<' && proxC == '<') {add_lex(&lex, &posl, proxC); return TK_BITWISE_ESQ;}

@@ -20,14 +20,19 @@ slr_cel * cel(char op, int estado, int qtd_desempilhar) {
 
 slr_busca * busca_cel(slr_tabela tabela, int estado, int tk) {
 	slr_busca *busca = (struct slr_busca*) malloc(sizeof(slr_busca));
-	int col;
+	int col, j;
+	gramatica_elem g_elem;
 
-	for (col = 0; col < 7; col++) {
-		if (tabela.gramatica[col] == tk) {
-			busca->tk = &tabela.gramatica[col];
-			busca->cel = tabela.slr_estados[estado][col];
+	for (col = 0; col < QTD_ELEM_GRAMATICA + 1; col++) {
+		g_elem = tabela.gramatica[col];
 
-			return busca;
+		for (j = 0; j < QTD_MAX_PROD + 1; j++) {
+			if (g_elem.producoes[j] == tk) {
+				busca->tk = &g_elem;
+				busca->cel = tabela.slr_estados[estado][col];
+
+				return busca;
+			}
 		}
 	}
 
@@ -47,7 +52,7 @@ int reduz(struct nodo **pilha, slr_tabela tabela, int *estado, int tk, int tk_gr
 		}
 
 		struct nodo * e = peek(pilha);
-		busca = busca_cel(tabela, e->dado, (tk_gram == -1 ? tk : tk_gram));
+		busca = busca_cel(tabela, e->dado, (tk_gram == 0 ? tk : tk_gram));
 	}
 
 	if (busca != NULL && busca->cel != NULL) {
@@ -100,9 +105,9 @@ int parse(char *exp, char *lex, char *tk_rec) {
 		reconhece = -1;
 	} else {
 		if (reconhece) {
-			busca = busca_cel(tabela, estado, 0);
+			busca = busca_cel(tabela, estado, TK_FIM_SENTENCA);
 			if (busca != NULL && busca->cel != NULL) {
-				reconhece = reduz(&pilha, tabela, &estado, 0, -busca->cel->estado, busca->cel->op, busca->cel->qtd_desempilhar);
+				reconhece = reduz(&pilha, tabela, &estado, TK_FIM_SENTENCA, -busca->cel->estado, busca->cel->op, busca->cel->qtd_desempilhar);
 			} else {
 				reconhece = 0;
 			}

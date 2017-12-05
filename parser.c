@@ -11,8 +11,8 @@ int main() {
 	int parse_res;
 
 	FILE *fp;
-	fp = fopen("slr_teste.c", "r");
-	//fp = fopen("program.c", "r");
+	//fp = fopen("slr_teste.c", "r");
+	fp = fopen("program.c", "r");
 	fread(exp, 1, 600, fp);
 	fflush(fp);
 	fclose(fp);
