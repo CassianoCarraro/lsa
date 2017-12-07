@@ -29,7 +29,7 @@ int main() {
 	free(exp);
 	free(lex);
 
-	#ifdef WIN32
+	#ifdef _WIN32
 		system("pause");
 	#endif
 }

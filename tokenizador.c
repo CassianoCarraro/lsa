@@ -38,7 +38,7 @@ int main() {
 		printf("Erro lexico: encontrou o caracter %s na linha: %d, coluna: %d\n", lex, linha, obter_coluna(lex));
 	}
 
-	#ifdef WIN32
+	#ifdef _WIN32
 		system("pause");
 	#endif
 }
