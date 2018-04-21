@@ -1,7 +1,7 @@
 #ifndef PILHA_H
 #define PILHA_H
 
-struct nodo{
+struct nodo {
 	int dado;
 	struct nodo *ant;
 } elemento;

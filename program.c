@@ -1,12 +1,12 @@
 int main() {
 	int a = 1;
 	int _b;
-	int c, d;
-	int e = -1;
+	int c, d, e;
+	int u = -1;
 	int f = +1;
 	int cst = 124;
 	int teste = (a == _b ? 5 : 10);
-	int b;
+	float g = 0;
 
 	f++;
 	f--;

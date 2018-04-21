@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "defs.h"
 #include "sintatico.h"
 #include "sintatico.c"
 
 int main() {
-	char *exp = (char *) malloc(sizeof(char) * 600);
-	char *lex = (char *) malloc(sizeof(char) * 20);
-	char *tk_rec = (char *) malloc(sizeof(char) * 20);
+	char *exp = (char *) malloc(sizeof(char) * TAMANHO_CODIGO);
+	char *lex = (char *) malloc(sizeof(char) * TAMANHO_LEX);
+	char *tk_rec = (char *) malloc(sizeof(char) * TAMANHO_LEX);
 	int parse_res;
 
 	FILE *fp;
