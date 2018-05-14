@@ -3,12 +3,12 @@
 
 #include "pilha.h"
 
-void push(struct nodo **topo, int valor){
+void push(struct nodo **topo, union dadoNodo dado){
 	struct nodo *novo;
 	struct nodo *atual = *topo;
 
 	novo = (struct nodo*) malloc(sizeof(elemento));
-	novo->dado = valor;
+	novo->dado = dado;
 	novo->ant = NULL;
 
 	if(*topo == NULL) {
@@ -49,7 +49,7 @@ void mostraPilha(struct nodo *pilha){
 		printf("Pilha Vazia\n");
 	} else {
 		while(aux != NULL) {
-			printf("Elemento: %d \n", aux->dado);
+			printf("Elemento: %s \n", aux->dado._string);
 			aux=aux->ant;
 		}
 	}

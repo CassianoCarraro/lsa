@@ -21,7 +21,7 @@ slr_cel * cel(char op, int estado, int qtd_desempilhar) {
 	return cel;
 }
 
-slr_busca * busca_cel(slr_tabela *tabela, int estado, int tk, char *lex, struct param **paramSemantico) {
+slr_busca * busca_cel(slr_tabela *tabela, int estado, int tk, char *lex, struct param **paramSintetizado) {
 	slr_busca *busca = (struct slr_busca*) malloc(sizeof(slr_busca));
 	int col, j;
 	gramatica_elem g_elem;
@@ -30,18 +30,19 @@ slr_busca * busca_cel(slr_tabela *tabela, int estado, int tk, char *lex, struct 
 		g_elem = tabela->gramatica[col];
 
 		for (j = 0; j < QTD_MAX_PROD + 1; j++) {
-			if (g_elem.producoes[j] == tk) {
+			if (g_elem.producoes[j].producao == tk) {
 				busca->tk = &g_elem;
 				busca->cel = tabela->slr_estados[estado][col];
 
-				if (g_elem.funcHerdado != NULL && *paramSemantico != NULL) {
-					g_elem.funcHerdado(*paramSemantico);
-				} else if (g_elem.funcSintetizado != NULL) {
+				if (g_elem.producoes[j].funcHerdado != NULL && *paramSintetizado != NULL) {
+					g_elem.producoes[j].funcHerdado(*paramSintetizado);
+				} else if (g_elem.producoes[j].funcSintetizado != NULL && busca->cel != NULL) {
 					struct param paramAux;
 					paramAux.lex = lex;
 					paramAux.tk = tk;
+					paramAux.op = busca->cel->op;
 
-					g_elem.funcSintetizado(paramSemantico, paramAux);
+					g_elem.producoes[j].funcSintetizado(paramSintetizado, paramAux);
 				}
 
 				return busca;
@@ -52,32 +53,34 @@ slr_busca * busca_cel(slr_tabela *tabela, int estado, int tk, char *lex, struct 
 	return NULL;
 }
 
-int reduz(struct nodo **pilha, slr_tabela *tabela, int *estado, int tk, int tk_gram, char op, int qtd_desempilhar, char *lex, struct param **paramSemantico) {
+int reduz(struct nodo **pilha, slr_tabela *tabela, int *estado, int tk, int tk_gram, char op, int qtd_desempilhar, char *lex, struct param **paramSintetizado) {
 	slr_busca *busca = NULL;
 	int i;
 	int reconhece = 1;
 
 	if (op == NEUTRO) {
-		busca = busca_cel(tabela, *estado, tk, lex, paramSemantico);
+		busca = busca_cel(tabela, *estado, tk, lex, paramSintetizado);
 	} else {
 		for (i = qtd_desempilhar; i > 0; i--) {
 			pop(pilha);
 		}
 
 		struct nodo * e = peek(pilha);
-		busca = busca_cel(tabela, e->dado, (tk_gram == 0 ? tk : tk_gram), lex, paramSemantico);
+		busca = busca_cel(tabela, e->dado._int, (tk_gram == 0 ? tk : tk_gram), lex, paramSintetizado);
 	}
 
 	if (busca != NULL && busca->cel != NULL) {
+		union dadoNodo dado = {busca->cel->estado};
+
 		if (busca->cel->op == EMPILHA) {
-			push(pilha, busca->cel->estado);
+			push(pilha, dado);
 			*estado = busca->cel->estado;
 		} else if (busca->cel->op == REDUZ) {
-			reconhece = reduz(pilha, tabela, estado, tk, -busca->cel->estado, busca->cel->op, busca->cel->qtd_desempilhar, lex, paramSemantico);
+			reconhece = reduz(pilha, tabela, estado, tk, -busca->cel->estado, busca->cel->op, busca->cel->qtd_desempilhar, lex, paramSintetizado);
 		} else if (busca->cel->op == NEUTRO) {
-			push(pilha, busca->cel->estado);
+			push(pilha, dado);
 			*estado = busca->cel->estado;
-			reconhece = reduz(pilha, tabela, estado, tk, -busca->cel->estado, busca->cel->op, busca->cel->qtd_desempilhar, lex, paramSemantico);
+			reconhece = reduz(pilha, tabela, estado, tk, -busca->cel->estado, busca->cel->op, busca->cel->qtd_desempilhar, lex, paramSintetizado);
 		}
 	} else {
 		reconhece = 0;
@@ -93,21 +96,24 @@ int parse(char *exp, char *lex, char *tk_rec) {
 	slr_busca *busca = NULL;
 	int estado = 0;
 	int reconhece = 0;
-	struct param *paramSemantico = NULL;
+	struct param *paramSintetizado = NULL;
 
 	char token_desc[53][17] = {TOKENS};
-	push(&pilha, 0);
+
+	union dadoNodo dado = {0};
+	push(&pilha, dado);
 
 	while((tk = le_token(exp, lex)) > 0) {
 		strcpy(tk_rec, token_desc[tk-1]);
 
-		busca = busca_cel(&tabela, estado, tk, lex, &paramSemantico);
+		busca = busca_cel(&tabela, estado, tk, lex, &paramSintetizado);
 		if (busca != NULL && busca->cel != NULL) {
 			if (busca->cel->op == EMPILHA) {
-				push(&pilha, busca->cel->estado);
+				dado._int = busca->cel->estado;
+				push(&pilha, dado);
 				estado = busca->cel->estado;
 			} else if (busca->cel->op == REDUZ) {
-				reconhece = reduz(&pilha, &tabela, &estado, tk, -busca->cel->estado, busca->cel->op, busca->cel->qtd_desempilhar, lex, &paramSemantico);
+				reconhece = reduz(&pilha, &tabela, &estado, tk, -busca->cel->estado, busca->cel->op, busca->cel->qtd_desempilhar, lex, &paramSintetizado);
 			}
 		} else {
 			reconhece = 0;
@@ -119,9 +125,9 @@ int parse(char *exp, char *lex, char *tk_rec) {
 		reconhece = -1;
 	} else {
 		if (reconhece) {
-			busca = busca_cel(&tabela, estado, FIM_SENTENCA, lex, &paramSemantico);
+			busca = busca_cel(&tabela, estado, FIM_SENTENCA, lex, &paramSintetizado);
 			if (busca != NULL && busca->cel != NULL) {
-				reconhece = reduz(&pilha, &tabela, &estado, FIM_SENTENCA, -busca->cel->estado, busca->cel->op, busca->cel->qtd_desempilhar, lex, &paramSemantico);
+				reconhece = reduz(&pilha, &tabela, &estado, FIM_SENTENCA, -busca->cel->estado, busca->cel->op, busca->cel->qtd_desempilhar, lex, &paramSintetizado);
 			} else {
 				reconhece = 0;
 			}
@@ -129,6 +135,8 @@ int parse(char *exp, char *lex, char *tk_rec) {
 			reconhece = 0;
 		}
 	}
+
+	//mostraPilha(pilhaLex);
 
 	return reconhece;
 }

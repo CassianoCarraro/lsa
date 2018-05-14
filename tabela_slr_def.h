@@ -8,54 +8,54 @@
 #define QTD_ELEM_PRODUCOES 202
 
 #define FIM_SENTENCA -200
-#define TK_FIM_SENTENCA {FIM_SENTENCA}
-#define E_LINHA {0}
-#define E {-1}
-#define INICIO {-2,-3}
-#define TIPO {{-4,-5,-6,-7}, NULL, &setLex}
-#define DEFINICAO_FUNCOES {-8,-9}
-#define DEFINICAO_FUNCAO {-10,-11}
-#define DEFINICAO_FUNCAO_CORPO {-12,-13}
-#define DEFINICAO_PARAMETROS {-14,-15}
-#define DEFINICAO_PARAMETRO {-16}
-#define DEFINICAO_VARIAVEIS {-17,-18}
-#define DEFINICAO_VARIAVEL {-19}
-#define DEFINICAO_VARIAVEL_LISTA_ID {-20,-21}
-#define DEFINICAO_VARIAVEL_ID {{-22,-23}, &definiciaoVariavelId, NULL}
-#define COMANDO {-24,-25,-26,-27,-28,-29}
-#define COMANDO_BLOCO {-30,-31,-32}
-#define COMANDO_LISTA {-33,-34}
-#define COMANDO_EXPRESSAO {-35,-36}
-#define COMANDO_ITERACAO {-37,-38,-39,-40}
-#define COMANDO_ITERACAO_COMANDO_FOR {-41,-42}
-#define COMANDO_PULO {-43,-44,-45}
-#define COMANDO_CONDICAO {-46,-47,-48}
-#define COMANDO_CONDICAO_SWITCH_BLOCO {-49,-50}
-#define COMANDO_CONDICAO_LISTA_CASE {-51,-52}
-#define COMANDO_CONDICAO_CASE {-53,-54}
-#define COMANDO_FUNCAO {-55}
-#define CHAMADA_FUNCAO {-56,-57}
-#define CHAMADA_FUNCAO_LISTA_PARAM {-58,-59}
-#define EXPRESSAO {-60}
-#define EXPRESSAO_CONDICIONAL {-61,-62}
-#define EXPRESSAO_LOGICA_OU {-63,-64}
-#define EXPRESSAO_LOGICA_E {-65,-66}
-#define EXPRESSAO_BITABIT_OU {-67,-68}
-#define EXPRESSAO_BITABIT_XOU {-69,-70}
-#define EXPRESSAO_BITABIT_E {-71,-72}
-#define EXPRESSAO_IGUALDADE {-73,-74,-75}
-#define EXPRESSAO_RELACIONAL {-76,-77,-78,-79,-80}
-#define EXPRESSAO_BITABIT_TROCA {-81,-82,-83}
-#define EXPRESSAO_SOMA {-84,-85,-86}
-#define EXPRESSAO_MULT {-87,-88,-89,-90}
-#define EXPRESSAO_ATRIB {-91,-92}
-#define EXPRESSAO_UNARIA {-93,-94,-95,-96,-97,-98}
-#define EXPRESSAO_PRIMARIA {-99,-100,-101,-102}
-#define OPERADOR_ATRIB {-103,-104,-105,-106,-107,-108}
-#define OPERADOR_UNARIO {-109,-110,-111,-112,-113}
+#define TK_FIM_SENTENCA {{{FIM_SENTENCA}}}
+#define E_LINHA {{{0}}}
+#define E {{{-1}}}
+#define INICIO {{{-2}, {-3}}}
+#define TIPO {{{-4}, {-5}, {-6}, {-7}}}
+#define DEFINICAO_FUNCOES {{{-8}, {-9}}}
+#define DEFINICAO_FUNCAO {{{-10}, {-11}}}
+#define DEFINICAO_FUNCAO_CORPO {{{-12}, {-13}}}
+#define DEFINICAO_PARAMETROS {{{-14}, {-15}}}
+#define DEFINICAO_PARAMETRO {{{-16}}}
+#define DEFINICAO_VARIAVEIS {{{-17}, {-18}}}
+#define DEFINICAO_VARIAVEL {{{-19}}}
+#define DEFINICAO_VARIAVEL_LISTA_ID {{{-20}, {-21}}}
+#define DEFINICAO_VARIAVEL_ID {{{-22, &definiciaoVariavelId, NULL}, {-23, &definiciaoVariavelId, NULL}}}
+#define COMANDO {{{-24}, {-25, &comandoExpressao, NULL}, {-26}, {-27}, {-28}, {-29}}}
+#define COMANDO_BLOCO {{{-30}, {-31}, {-32}}}
+#define COMANDO_LISTA {{{-33}, {-34}}}
+#define COMANDO_EXPRESSAO {{{-35}, {-36}}}
+#define COMANDO_ITERACAO {{{-37}, {-38}, {-39}, {-40}}}
+#define COMANDO_ITERACAO_COMANDO_FOR {{{-41}, {-42}}}
+#define COMANDO_PULO {{{-43}, {-44}, {-45}}}
+#define COMANDO_CONDICAO {{{-46}, {-47}, {-48}}}
+#define COMANDO_CONDICAO_SWITCH_BLOCO {{{-49}, {-50}}}
+#define COMANDO_CONDICAO_LISTA_CASE {{{-51}, {-52}}}
+#define COMANDO_CONDICAO_CASE {{{-53}, {-54}}}
+#define COMANDO_FUNCAO {{{-55}}}
+#define CHAMADA_FUNCAO {{{-56}, {-57}}}
+#define CHAMADA_FUNCAO_LISTA_PARAM {{{-58}, {-59}}}
+#define EXPRESSAO {{{-60}}}
+#define EXPRESSAO_CONDICIONAL {{{-61}, {-62}}}
+#define EXPRESSAO_LOGICA_OU {{{-63}, {-64}}}
+#define EXPRESSAO_LOGICA_E {{{-65}, {-66}}}
+#define EXPRESSAO_BITABIT_OU {{{-67}, {-68}}}
+#define EXPRESSAO_BITABIT_XOU {{{-69}, {-70}}}
+#define EXPRESSAO_BITABIT_E {{{-71}, {-72}}}
+#define EXPRESSAO_IGUALDADE {{{-73}, {-74}, {-75}}}
+#define EXPRESSAO_RELACIONAL {{{-76}, {-77}, {-78}, {-79}, {-80}}}
+#define EXPRESSAO_BITABIT_TROCA {{{-81}, {-82}, {-83}}}
+#define EXPRESSAO_SOMA {{{-84}, {-85}, {-86}}}
+#define EXPRESSAO_MULT {{{-87}, {-88}, {-89}, {-90}}}
+#define EXPRESSAO_ATRIB {{{-91}, {-92}}}
+#define EXPRESSAO_UNARIA {{{-93}, {-94}, {-95}, {-96}, {-97}, {-98}}}
+#define EXPRESSAO_PRIMARIA {{{-99}, {-100, &expressaoPrimaria, NULL}, {-101}, {-102}}}
+#define OPERADOR_ATRIB {{{-103}, {-104}, {-105}, {-106}, {-107}, {-108}}}
+#define OPERADOR_UNARIO {{{-109}, {-110}, {-111}, {-112}, {-113}}}
 
 #define GRAMATICA \
-{{TK_VOID}, NULL, &tipo}, {{TK_INT}, NULL, &tipo}, {{TK_FLOAT}, NULL, &tipo}, {{TK_DOUBLE}, NULL, &tipo}, {{TK_ID}, NULL, &setLex}, {TK_ABRE_PAR}, {TK_FECHAR_PAR}, {TK_PONTO_VIRG}, {TK_VIRGULA}, {TK_ATRIB}, {TK_ABRE_CHAVE}, {TK_FECHA_CHAVE}, {TK_WHILE}, {TK_DO}, {TK_FOR}, {TK_RETURN}, {TK_CONTINUE}, {TK_BREAK}, {TK_IF}, {TK_ELSE}, {TK_SWITCH}, {TK_CASE}, {TK_CONST}, {TK_DOIS_PONTOS}, {TK_DEFAULT}, {TK_INTERROGACAO}, {TK_OU}, {TK_E}, {TK_BITWISE_OU}, {TK_BITWISE_XOU}, {TK_BITWISE_E}, {TK_IGUAL}, {TK_DIFERENTE}, {TK_MAIOR}, {TK_MENOR}, {TK_MAIOR_IGUAL}, {TK_MENOR_IGUAL}, {TK_BITWISE_ESQ}, {TK_BITWISE_DIR}, {TK_SOMA}, {TK_SUB}, {TK_MULT}, {TK_DIV}, {TK_RESTO}, {TK_INCREMENTO}, {TK_DECREMENTO}, {TK_INCR_MULT}, {TK_INCR_DIV}, {TK_INCR_RESTO}, {TK_INCR_SOMA}, {TK_INCR_SUB}, {TK_BITWISE_COMPL}, {TK_NEGACAO}, \
+{{{TK_VOID, NULL, &tipo}}}, {{{TK_INT, NULL, &tipo}}}, {{{TK_FLOAT, NULL, &tipo}}}, {{{TK_DOUBLE, NULL, &tipo}}}, {{{TK_ID, NULL, &setLex}}}, {{{TK_ABRE_PAR}}}, {{{TK_FECHAR_PAR}}}, {{{TK_PONTO_VIRG}}}, {{{TK_VIRGULA}}}, {{{TK_ATRIB}}}, {{{TK_ABRE_CHAVE}}}, {{{TK_FECHA_CHAVE}}}, {{{TK_WHILE}}}, {{{TK_DO}}}, {{{TK_FOR}}}, {{{TK_RETURN}}}, {{{TK_CONTINUE}}}, {{{TK_BREAK}}}, {{{TK_IF}}}, {{{TK_ELSE}}}, {{{TK_SWITCH}}}, {{{TK_CASE}}}, {{{TK_CONST, NULL, &setConst}}}, {{{TK_DOIS_PONTOS}}}, {{{TK_DEFAULT}}}, {{{TK_INTERROGACAO}}}, {{{TK_OU}}}, {{{TK_E}}}, {{{TK_BITWISE_OU}}}, {{{TK_BITWISE_XOU}}}, {{{TK_BITWISE_E}}}, {{{TK_IGUAL}}}, {{{TK_DIFERENTE}}}, {{{TK_MAIOR}}}, {{{TK_MENOR}}}, {{{TK_MAIOR_IGUAL}}}, {{{TK_MENOR_IGUAL}}}, {{{TK_BITWISE_ESQ}}}, {{{TK_BITWISE_DIR}}}, {{{TK_SOMA}}}, {{{TK_SUB}}}, {{{TK_MULT}}}, {{{TK_DIV}}}, {{{TK_RESTO}}}, {{{TK_INCREMENTO}}}, {{{TK_DECREMENTO}}}, {{{TK_INCR_MULT}}}, {{{TK_INCR_DIV}}}, {{{TK_INCR_RESTO}}}, {{{TK_INCR_SOMA}}}, {{{TK_INCR_SUB}}}, {{{TK_BITWISE_COMPL}}}, {{{TK_NEGACAO}}}, \
 TK_FIM_SENTENCA, E_LINHA, E, INICIO, TIPO, DEFINICAO_FUNCOES, DEFINICAO_FUNCAO, DEFINICAO_FUNCAO_CORPO, DEFINICAO_PARAMETROS, DEFINICAO_PARAMETRO, DEFINICAO_VARIAVEIS, DEFINICAO_VARIAVEL, DEFINICAO_VARIAVEL_LISTA_ID, DEFINICAO_VARIAVEL_ID, COMANDO, COMANDO_BLOCO, COMANDO_LISTA, COMANDO_EXPRESSAO, COMANDO_ITERACAO, COMANDO_ITERACAO_COMANDO_FOR, COMANDO_PULO, COMANDO_CONDICAO, COMANDO_CONDICAO_SWITCH_BLOCO, COMANDO_CONDICAO_LISTA_CASE, COMANDO_CONDICAO_CASE, COMANDO_FUNCAO, CHAMADA_FUNCAO, CHAMADA_FUNCAO_LISTA_PARAM, EXPRESSAO, EXPRESSAO_CONDICIONAL, EXPRESSAO_LOGICA_OU, EXPRESSAO_LOGICA_E, EXPRESSAO_BITABIT_OU, EXPRESSAO_BITABIT_XOU, EXPRESSAO_BITABIT_E, EXPRESSAO_IGUALDADE, EXPRESSAO_RELACIONAL, EXPRESSAO_BITABIT_TROCA, EXPRESSAO_SOMA, EXPRESSAO_MULT, EXPRESSAO_ATRIB, EXPRESSAO_UNARIA, EXPRESSAO_PRIMARIA, OPERADOR_ATRIB, OPERADOR_UNARIO
 
 #define TABELA_SLR \
@@ -268,10 +268,14 @@ struct slr_cel {
 	int qtd_desempilhar;
 } typedef slr_cel;
 
-struct gramatica_elem {
-	int producoes[QTD_MAX_PROD];
+struct gramatica_elem_producao {
+	int producao;
 	void (*funcHerdado)(struct param *herdado);
 	void (*funcSintetizado)(struct param **sintetizado, struct param paramAux);
+} typedef gramatica_elem_producao;
+
+struct gramatica_elem {
+	gramatica_elem_producao producoes[QTD_MAX_PROD];
 } typedef gramatica_elem;
 
 struct slr_busca {

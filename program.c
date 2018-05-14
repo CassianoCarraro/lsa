@@ -6,7 +6,7 @@ int main() {
 	int f = +1;
 	int cst = 124;
 	int teste = (a == _b ? 5 : 10);
-	float g = 0;
+	float g = 2.587;
 
 	f++;
 	f--;
