@@ -89,7 +89,7 @@ int reduz(struct nodo **pilha, slr_tabela *tabela, int *estado, int tk, int tk_g
 	return reconhece;
 }
 
-int parse(char *exp, char *lex, char *tk_rec) {
+int parse(char *lex, char *tk_rec) {
 	slr_tabela tabela = {{GRAMATICA}, {TABELA_SLR}};
 
 	struct nodo *pilha = NULL;
@@ -103,7 +103,7 @@ int parse(char *exp, char *lex, char *tk_rec) {
 	union dadoNodo dado = {0};
 	push(&pilha, dado);
 
-	while((tk = le_token(exp, lex)) > 0) {
+	while((tk = le_token(lex)) > 0) {
 		strcpy(tk_rec, token_desc[tk-1]);
 
 		busca = busca_cel(&tabela, estado, tk, lex, &paramSintetizado);

@@ -6,18 +6,13 @@
 #include "sintatico.c"
 
 int main() {
-	char *exp = (char *) malloc(sizeof(char) * TAMANHO_CODIGO);
 	char *lex = (char *) malloc(sizeof(char) * TAMANHO_LEX);
 	char *tk_rec = (char *) malloc(sizeof(char) * TAMANHO_LEX);
 	int parse_res;
 
-	FILE *fp;
-	fp = fopen("program.c", "r");
-	fread(exp, 1, 600, fp);
-	fflush(fp);
-	fclose(fp);
+	arqin = fopen("program.c", "r");
 
-	parse_res = parse(exp, lex, tk_rec);
+	parse_res = parse(lex, tk_rec);
 
 	if (parse_res == 1) {
 		printf("OK\n");
@@ -27,8 +22,10 @@ int main() {
 		printf("Erro lexico: encontrou o caracter %s na linha: %d, coluna: %d\n", lex, linha, obter_coluna(lex));
 	}
 
-	free(exp);
 	free(lex);
+
+	fflush(arqin);
+	fclose(arqin);
 
 	#ifdef _WIN32
 		system("pause");

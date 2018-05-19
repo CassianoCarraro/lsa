@@ -118,6 +118,8 @@ int linha = 1;
 int coluna = 1;
 int tk;
 
+FILE *arqin;
+
 struct pal_res {
 	char palavra[20];
 	int tk;
@@ -141,7 +143,7 @@ struct pal_res lista_pal[] = {
 	{"return", TK_RETURN}
 };
 
-int le_token(char st[], char lex[]);
+int le_token(char lex[]);
 int obter_coluna(char *lex);
 
 #endif

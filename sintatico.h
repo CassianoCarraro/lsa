@@ -8,7 +8,7 @@
 #define NEUTRO ' '
 #define REDUZ 'R'
 
-int parse(char *exp, char *lex, char *tk_rec);
+int parse(char *lex, char *tk_rec);
 slr_cel * cel(char op, int estado, int qtd_desempilhar);
 slr_busca * busca_cel(slr_tabela *tabela, int estado, int tk, char *lex, struct param **paramSemantico);
 
