@@ -49,7 +49,7 @@
 #define EXPRESSAO_SOMA {{{-84}, {-85}, {-86}}}
 #define EXPRESSAO_MULT {{{-87}, {-88}, {-89}, {-90}}}
 #define EXPRESSAO_ATRIB {{{-91}, {-92}}}
-#define EXPRESSAO_UNARIA {{{-93}, {-94}, {-95}, {-96}, {-97}, {-98}}}
+#define EXPRESSAO_UNARIA {{{-93}, {-94}, {-95, NULL, &expressaoUnariaIncrDir}, {-96}, {-97}, {-98}}}
 #define EXPRESSAO_PRIMARIA {{{-99}, {-100, &expressaoPrimaria, NULL}, {-101}, {-102}}}
 #define OPERADOR_ATRIB {{{-103}, {-104}, {-105}, {-106}, {-107}, {-108}}}
 #define OPERADOR_UNARIO {{{-109}, {-110}, {-111}, {-112}, {-113}}}

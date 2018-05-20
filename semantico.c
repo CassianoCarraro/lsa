@@ -99,3 +99,8 @@ void addTabSim(char *lex, int tkTipo) {
 		exit(EXIT_FAILURE);
 	}
 }
+
+void expressaoUnariaIncrDir(struct param **sintetizado, struct param paramAux) {
+	struct nodo *nodo = pop(&pilhaLex);
+	printf("%s := %s + 1\n", nodo->dado._string, nodo->dado._string, 1);
+}

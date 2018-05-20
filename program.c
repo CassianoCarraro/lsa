@@ -9,6 +9,7 @@ int main() {
 	float g = 2.587;
 
 	f++;
+	int f2 = f++;
 	f--;
 	f += 1;
 	f -= 1;
