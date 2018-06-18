@@ -7,6 +7,12 @@ int main() {
 	int cst = 124;
 	int teste = (a == _b ? 5 : 10);
 	float g = 2.587;
+	int es = a + b;
+	int em = a * b;
+	int ed = a / b;
+	int er = a % b;
+	int ecom = a + b * 5;
+	float ecom2 = a * 1.5 + b / 5;
 
 	f++;
 	int f2 = f++;

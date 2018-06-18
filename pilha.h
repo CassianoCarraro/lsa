@@ -4,6 +4,7 @@
 union dadoNodo {
 	int _int;
 	char *_string;
+	double _double;
 } dadoNodo;
 
 struct nodo {

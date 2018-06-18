@@ -11,6 +11,7 @@ int main() {
 	int parse_res;
 
 	arqin = fopen("program.c", "r");
+	arqout = fopen("out.c3e", "w");
 
 	parse_res = parse(lex, tk_rec);
 
@@ -26,6 +27,9 @@ int main() {
 
 	fflush(arqin);
 	fclose(arqin);
+
+	fflush(arqout);
+	fclose(arqout);
 
 	#ifdef _WIN32
 		system("pause");
