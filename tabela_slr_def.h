@@ -36,22 +36,22 @@
 #define COMANDO_FUNCAO {{{-55}}}
 #define CHAMADA_FUNCAO {{{-56}, {-57}}}
 #define CHAMADA_FUNCAO_LISTA_PARAM {{{-58}, {-59}}}
-#define EXPRESSAO {{{-60}}}
+#define EXPRESSAO {{{-60, &expressao, NULL}}}
 #define EXPRESSAO_CONDICIONAL {{{-61}, {-62}}}
 #define EXPRESSAO_LOGICA_OU {{{-63}, {-64}}}
 #define EXPRESSAO_LOGICA_E {{{-65}, {-66}}}
-#define EXPRESSAO_BITABIT_OU {{{-67}, {-68}}}
-#define EXPRESSAO_BITABIT_XOU {{{-69}, {-70}}}
-#define EXPRESSAO_BITABIT_E {{{-71}, {-72}}}
-#define EXPRESSAO_IGUALDADE {{{-73}, {-74}, {-75}}}
-#define EXPRESSAO_RELACIONAL {{{-76}, {-77}, {-78}, {-79}, {-80}}}
-#define EXPRESSAO_BITABIT_TROCA {{{-81}, {-82}, {-83}}}
+#define EXPRESSAO_BITABIT_OU {{{-67}, {-68, NULL, &expressaoBitBitOu}}}
+#define EXPRESSAO_BITABIT_XOU {{{-69}, {-70, NULL, &expressaoBitBitXou}}}
+#define EXPRESSAO_BITABIT_E {{{-71}, {-72, NULL, &expressaoBitBitE}}}
+#define EXPRESSAO_IGUALDADE {{{-73}, {-74, NULL, &expressaoIgualdadeIgual}, {-75, NULL, &expressaoIgualdadeDiferente}}}
+#define EXPRESSAO_RELACIONAL {{{-76}, {-77, NULL, &expressaoRelacionalMaior}, {-78, NULL, &expressaoRelacionalMenor}, {-79, NULL, &expressaoRelacionalMaiorIgual}, {-80, NULL, &expressaoRelacionalMenorIgual}}}
+#define EXPRESSAO_BITABIT_TROCA {{{-81}, {-82, NULL, &expressaoBitBitEsq}, {-83, NULL, &expressaoBitBitDir}}}
 #define EXPRESSAO_SOMA {{{-84}, {-85, NULL, &expressaoSoma}, {-86, NULL, &expressaoSub}}}
 #define EXPRESSAO_MULT {{{-87}, {-88, NULL, &expressaoMult}, {-89, NULL, &expressaoDiv}, {-90, NULL, &expressaoResto}}}
-#define EXPRESSAO_ATRIB {{{-91}, {-92}}}
-#define EXPRESSAO_UNARIA {{{-93}, {-94}, {-95, NULL, &expressaoUnariaIncrDir}, {-96, NULL, &expressaoUnariaDecrDir}, {-97}, {-98}}}
+#define EXPRESSAO_ATRIB {{{-91}, {-92, NULL, &expressaoAtrib}}}
+#define EXPRESSAO_UNARIA {{{-93, NULL, &expressaoUnariaIncrDir}, {-94, NULL, &expressaoUnariaDecrDir}, {-95, NULL, &expressaoUnariaIncrDir}, {-96, NULL, &expressaoUnariaDecrDir}, {-97}, {-98}}}
 #define EXPRESSAO_PRIMARIA {{{-99, &expressaoPrimariaConst, NULL}, {-100, &expressaoPrimaria, NULL}, {-101}, {-102}}}
-#define OPERADOR_ATRIB {{{-103}, {-104}, {-105}, {-106}, {-107}, {-108}}}
+#define OPERADOR_ATRIB {{{-103}, {-104, NULL, &operadorAtribIncrMult}, {-105, NULL, &operadorAtribIncrDiv}, {-106, NULL, &operadorAtribIncrResto}, {-107, NULL, &operadorAtribIncrSoma}, {-108, NULL, &operadorAtribIncrSub}}}
 #define OPERADOR_UNARIO {{{-109}, {-110}, {-111}, {-112}, {-113}}}
 
 #define GRAMATICA \

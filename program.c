@@ -14,14 +14,13 @@ int main() {
 	int ecom = a + b * 5;
 	float ecom2 = a * 1.5 + b / 5;
 
-	f++;
-	int f2 = f++;
+	int f2 = ++f;
 	f--;
 	f += 1;
-	f -= 1;
-	f /= 1;
-	f *= 1;
-	f %= 1;
+	f -= 2;
+	f /= 3;
+	f *= 4;
+	f %= 5;
 	f = a & b;
 	f = a | b;
 	f = a ^ b;

@@ -15,6 +15,7 @@ struct param {
 	char op;
 	union valor *valor;
 	int tipoValor;
+	int atrib;
 } param;
 
 void (*funcHerdado)(struct param *herdado);
@@ -30,6 +31,27 @@ void expressaoSub(struct param **sintetizado, struct param paramAux);
 void expressaoMult(struct param **sintetizado, struct param paramAux);
 void expressaoDiv(struct param **sintetizado, struct param paramAux);
 void expressaoResto(struct param **sintetizado, struct param paramAux);
+void expressaoBitBitE(struct param **sintetizado, struct param paramAux);
+void expressaoBitBitOu(struct param **sintetizado, struct param paramAux);
+void expressaoBitBitXou(struct param **sintetizado, struct param paramAux);
+void expressaoBitBitEsq(struct param **sintetizado, struct param paramAux);
+void expressaoBitBitDir(struct param **sintetizado, struct param paramAux);
+
+void expressaoIgualdadeIgual(struct param **sintetizado, struct param paramAux);
+void expressaoIgualdadeDiferente(struct param **sintetizado, struct param paramAux);
+void expressaoRelacionalMaior(struct param **sintetizado, struct param paramAux);
+void expressaoRelacionalMenor(struct param **sintetizado, struct param paramAux);
+void expressaoRelacionalMaiorIgual(struct param **sintetizado, struct param paramAux);
+void expressaoRelacionalMenorIgual(struct param **sintetizado, struct param paramAux);
+void expressaoAtrib(struct param **sintetizado, struct param paramAux);
+
+void operadorAtribIncr(struct param **sintetizado, struct param paramAux);
+void operadorAtribIncrMult(struct param **sintetizado, struct param paramAux);
+void operadorAtribIncrDiv(struct param **sintetizado, struct param paramAux);
+void operadorAtribIncrResto(struct param **sintetizado, struct param paramAux);
+void operadorAtribIncrSub(struct param **sintetizado, struct param paramAux);
+
+void expressao(struct param *herdado);
 
 void definiciaoVariavelId(struct param *herdado);
 void expressaoPrimaria(struct param *herdado);

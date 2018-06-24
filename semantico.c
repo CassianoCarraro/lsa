@@ -58,17 +58,29 @@ char * geraLabel() {
 	return label;
 }
 
-void geraCodExpressao(char op) {
+void geraCodExpressao() {
+	struct nodo *op = pop(&pilhaPlace);
 	struct nodo *y = pop(&pilhaPlace);
 	struct nodo *x = pop(&pilhaPlace);
 
 	if (x != NULL && y != NULL) {
 		char * temp = geraTemp();
 		empilhaPlace(temp);
-		fprintf(arqout, "%s := %s %c %s\n", temp, x->dado._string, op, y->dado._string);
+		fprintf(arqout, "%s := %s %s %s\n", temp, x->dado._string, op->dado._string, y->dado._string);
 	}
 }
 
+void geraCodAtribuicao(char * var, int tkGramAtrib) {
+	if (tkGramAtrib == 1) {
+		struct nodo *temp = pop(&pilhaPlace);
+		fprintf(arqout, "%s := %s\n", var, temp->dado._string);
+	} else {
+		struct nodo *incr = pop(&pilhaPlace);
+		struct nodo *op = pop(&pilhaPlace);
+
+		fprintf(arqout, "%s := %s %s %s\n", var, var, op->dado._string, incr->dado._string);
+	}
+}
 
 void tipo(struct param **sintetizado, struct param paramAux) {
 	if (*sintetizado != NULL) {
@@ -77,6 +89,7 @@ void tipo(struct param **sintetizado, struct param paramAux) {
 
 	*sintetizado = (struct param *)malloc(sizeof(param));
 	(*sintetizado)->tk = paramAux.tk;
+	(*sintetizado)->atrib = 0;
 
 	paramAux.lex = (char *)malloc(sizeof(char) * 2);
 	strcpy(paramAux.lex, "0");
@@ -116,9 +129,11 @@ void setConst(struct param **sintetizado, struct param paramAux) {
 }
 
 void definiciaoVariavelId(struct param *herdado) {
-	//mostraPilha(pilhaLex);
-
 	struct nodo *nodo = pop(&pilhaLex);
+	if (nodo == NULL) {
+		return;
+	}
+
 	addTabSim(nodo->dado._string, herdado->tk);
 
 	if (pilhaPlace == NULL) {
@@ -135,12 +150,11 @@ void definiciaoVariavelId(struct param *herdado) {
 				fprintf(arqout, "%.17g", herdado->valor->d);
 				break;
 		}
-	} else {
-		struct nodo *temp = pop(&pilhaPlace);
-		fprintf(arqout, "%s := %s", nodo->dado._string, temp->dado._string);
-	}
 
-	fprintf(arqout, "\n");
+		fprintf(arqout, "\n");
+	} else {
+		geraCodAtribuicao(nodo->dado._string, 1);
+	}
 }
 
 void expressaoPrimaria(struct param *herdado) {
@@ -183,29 +197,143 @@ void addTabSim(char *lex, int tkTipo) {
 void expressaoUnariaIncrDir(struct param **sintetizado, struct param paramAux) {
 	struct nodo *nodo = pop(&pilhaLex);
 	fprintf(arqout, "%s := %s + 1\n", nodo->dado._string, nodo->dado._string);
+	empilhaPlace(nodo->dado._string);
 }
 
 void expressaoUnariaDecrDir(struct param **sintetizado, struct param paramAux) {
 	struct nodo *nodo = pop(&pilhaLex);
 	fprintf(arqout, "%s := %s - 1\n", nodo->dado._string, nodo->dado._string);
+	empilhaPlace(nodo->dado._string);
 }
 
 void expressaoSoma(struct param **sintetizado, struct param paramAux) {
-	geraCodExpressao('+');
+	empilhaPlace("+");
+	geraCodExpressao();
 }
 
 void expressaoSub(struct param **sintetizado, struct param paramAux) {
-	geraCodExpressao('-');
+	empilhaPlace("-");
+	geraCodExpressao();
 }
 
 void expressaoMult(struct param **sintetizado, struct param paramAux) {
-	geraCodExpressao('*');
+	empilhaPlace("*");
+	geraCodExpressao();
 }
 
 void expressaoDiv(struct param **sintetizado, struct param paramAux) {
-	geraCodExpressao('/');
+	empilhaPlace("/");
+	geraCodExpressao();
 }
 
 void expressaoResto(struct param **sintetizado, struct param paramAux) {
-	geraCodExpressao('%');
+	empilhaPlace("%");
+	geraCodExpressao();
+}
+
+void expressaoBitBitE(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = 1;
+	empilhaPlace("&");
+	geraCodExpressao();
+}
+
+void expressaoBitBitOu(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = 1;
+	empilhaPlace("|");
+	geraCodExpressao();
+}
+
+void expressaoBitBitXou(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = 1;
+	empilhaPlace("^");
+	geraCodExpressao();
+}
+
+void expressaoBitBitEsq(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = 1;
+	empilhaPlace("<<");
+	geraCodExpressao();
+}
+
+void expressaoBitBitDir(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = 1;
+	empilhaPlace(">>");
+	geraCodExpressao();
+}
+
+void expressaoIgualdadeIgual(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = 1;
+	empilhaPlace("==");
+	geraCodExpressao();
+}
+
+void expressaoIgualdadeDiferente(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = 1;
+	empilhaPlace("!=");
+	geraCodExpressao();
+}
+
+void expressaoRelacionalMaior(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = 1;
+	empilhaPlace(">");
+	geraCodExpressao();
+}
+
+void expressaoRelacionalMenor(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = 1;
+	empilhaPlace("<");
+	geraCodExpressao();
+}
+
+void expressaoRelacionalMaiorIgual(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = 1;
+	empilhaPlace(">=");
+	geraCodExpressao();
+}
+
+void expressaoRelacionalMenorIgual(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = 1;
+	empilhaPlace("<=");
+	geraCodExpressao();
+}
+
+void expressaoAtrib(struct param **sintetizado, struct param paramAux) {
+	if ((*sintetizado)->atrib == 0) {
+		(*sintetizado)->atrib = 1;
+	}
+}
+
+void expressao(struct param *herdado) {
+	if (herdado->atrib) {
+		struct nodo *nodo = pop(&pilhaLex);
+		if (nodo != NULL) {
+			geraCodAtribuicao(nodo->dado._string, herdado->atrib);
+		}
+	}
+}
+
+
+void operadorAtribIncrMult(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = paramAux.tk;
+	empilhaPlace("*");
+}
+
+void operadorAtribIncrDiv(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = paramAux.tk;
+	empilhaPlace("/");
+}
+
+void operadorAtribIncrResto(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = paramAux.tk;
+	empilhaPlace("%");
+}
+
+void operadorAtribIncrSoma(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = paramAux.tk;
+	empilhaPlace("+");
+}
+
+void operadorAtribIncrSub(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = paramAux.tk;
+	empilhaPlace("-");
 }
