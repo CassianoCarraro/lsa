@@ -16,7 +16,7 @@ int main() {
 	parse_res = parse(lex, tk_rec);
 
 	if (parse_res == 1) {
-		printf("OK\n");
+		printf("OK. Arquivo out.c3e gerado.\n");
 	} else if (parse_res == 0) {
 		printf("Erro sintatico: token %s não esperado na linha: %d, coluna: %d.\n", tk_rec, linha, obter_coluna(lex));
 	} else if (parse_res == -1) {

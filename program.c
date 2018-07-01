@@ -5,7 +5,7 @@ int main() {
 	int u = -1;
 	int f = +1;
 	int cst = 124;
-	int teste = (a == _b ? 5 : 10);
+	int teste = 10;
 	float g = 2.587;
 	int es = a + b;
 	int em = a * b;
@@ -37,28 +37,10 @@ int main() {
 	}
 
 	do {
+		a = b + c;
 	} while(a > 0);
 
-	for (int i = 0; i < 10; ++i) {
-		break;
-	}
-
-	for (; ; ) {
-		break;
-	}
-
 	if (a == e && b != c) {
-	} else if (a == 0 || a <= 0 || a >= 0) {
 	} else {
 	}
-
-	switch(a) {
-		case 1:
-		break;
-		default:
-		break;
-	}
-
-	main();
-	return 1;
 }

@@ -15,29 +15,29 @@
 #define TIPO {{{-4}, {-5}, {-6}, {-7}}}
 #define DEFINICAO_FUNCOES {{{-8}, {-9}}}
 #define DEFINICAO_FUNCAO {{{-10}, {-11}}}
-#define DEFINICAO_FUNCAO_CORPO {{{-12}, {-13}}}
+#define DEFINICAO_FUNCAO_CORPO {{{-12}, {-13, &definicaoFuncaoCorpo, NULL}}}
 #define DEFINICAO_PARAMETROS {{{-14}, {-15}}}
 #define DEFINICAO_PARAMETRO {{{-16}}}
 #define DEFINICAO_VARIAVEIS {{{-17}, {-18}}}
 #define DEFINICAO_VARIAVEL {{{-19}}}
 #define DEFINICAO_VARIAVEL_LISTA_ID {{{-20}, {-21}}}
 #define DEFINICAO_VARIAVEL_ID {{{-22, &definiciaoVariavelId, NULL}, {-23, &definiciaoVariavelId, NULL}}}
-#define COMANDO {{{-24}, {-25, &comandoExpressao, NULL}, {-26}, {-27}, {-28}, {-29}}}
+#define COMANDO {{{-24}, {-25, NULL, &comandoExpressao}, {-26}, {-27}, {-28}, {-29}}}
 #define COMANDO_BLOCO {{{-30}, {-31}, {-32}}}
 #define COMANDO_LISTA {{{-33}, {-34}}}
 #define COMANDO_EXPRESSAO {{{-35}, {-36}}}
-#define COMANDO_ITERACAO {{{-37}, {-38}, {-39}, {-40}}}
+#define COMANDO_ITERACAO {{{-37, &comandoIteracaoWhile, NULL}, {-38, &comandoIteracaoDoWhile, NULL}, {-39}, {-40}}}
 #define COMANDO_ITERACAO_COMANDO_FOR {{{-41}, {-42}}}
 #define COMANDO_PULO {{{-43}, {-44}, {-45}}}
-#define COMANDO_CONDICAO {{{-46}, {-47}, {-48}}}
+#define COMANDO_CONDICAO {{{-46, &comandoCondicaoIf, NULL}, {-47, &comandoCondicaoIfElse, NULL}, {-48, &comandoCondicaoSwitch, NULL}}}
 #define COMANDO_CONDICAO_SWITCH_BLOCO {{{-49}, {-50}}}
 #define COMANDO_CONDICAO_LISTA_CASE {{{-51}, {-52}}}
-#define COMANDO_CONDICAO_CASE {{{-53}, {-54}}}
+#define COMANDO_CONDICAO_CASE {{{-53, &comandoCondicaoCase, NULL}, {-54, &comandoCondicaoCase, NULL}}}
 #define COMANDO_FUNCAO {{{-55}}}
 #define CHAMADA_FUNCAO {{{-56}, {-57}}}
 #define CHAMADA_FUNCAO_LISTA_PARAM {{{-58}, {-59}}}
 #define EXPRESSAO {{{-60, &expressao, NULL}}}
-#define EXPRESSAO_CONDICIONAL {{{-61}, {-62}}}
+#define EXPRESSAO_CONDICIONAL {{{-61}, {-62, &comandoCondicaoIf, NULL}}}
 #define EXPRESSAO_LOGICA_OU {{{-63}, {-64}}}
 #define EXPRESSAO_LOGICA_E {{{-65}, {-66}}}
 #define EXPRESSAO_BITABIT_OU {{{-67}, {-68, NULL, &expressaoBitBitOu}}}
@@ -51,11 +51,11 @@
 #define EXPRESSAO_ATRIB {{{-91}, {-92, NULL, &expressaoAtrib}}}
 #define EXPRESSAO_UNARIA {{{-93, NULL, &expressaoUnariaIncrDir}, {-94, NULL, &expressaoUnariaDecrDir}, {-95, NULL, &expressaoUnariaIncrDir}, {-96, NULL, &expressaoUnariaDecrDir}, {-97}, {-98}}}
 #define EXPRESSAO_PRIMARIA {{{-99, &expressaoPrimariaConst, NULL}, {-100, &expressaoPrimaria, NULL}, {-101}, {-102}}}
-#define OPERADOR_ATRIB {{{-103}, {-104, NULL, &operadorAtribIncrMult}, {-105, NULL, &operadorAtribIncrDiv}, {-106, NULL, &operadorAtribIncrResto}, {-107, NULL, &operadorAtribIncrSoma}, {-108, NULL, &operadorAtribIncrSub}}}
+#define OPERADOR_ATRIB {{{-103, NULL, &operadorAtrib}, {-104, NULL, &operadorAtribIncrMult}, {-105, NULL, &operadorAtribIncrDiv}, {-106, NULL, &operadorAtribIncrResto}, {-107, NULL, &operadorAtribIncrSoma}, {-108, NULL, &operadorAtribIncrSub}}}
 #define OPERADOR_UNARIO {{{-109}, {-110}, {-111}, {-112}, {-113}}}
 
 #define GRAMATICA \
-{{{TK_VOID, NULL, &tipo}}}, {{{TK_INT, NULL, &tipo}}}, {{{TK_FLOAT, NULL, &tipo}}}, {{{TK_DOUBLE, NULL, &tipo}}}, {{{TK_ID, NULL, &setLex}}}, {{{TK_ABRE_PAR}}}, {{{TK_FECHAR_PAR}}}, {{{TK_PONTO_VIRG}}}, {{{TK_VIRGULA}}}, {{{TK_ATRIB}}}, {{{TK_ABRE_CHAVE}}}, {{{TK_FECHA_CHAVE}}}, {{{TK_WHILE}}}, {{{TK_DO}}}, {{{TK_FOR}}}, {{{TK_RETURN}}}, {{{TK_CONTINUE}}}, {{{TK_BREAK}}}, {{{TK_IF}}}, {{{TK_ELSE}}}, {{{TK_SWITCH}}}, {{{TK_CASE}}}, {{{TK_CONST, NULL, &setConst}}}, {{{TK_DOIS_PONTOS}}}, {{{TK_DEFAULT}}}, {{{TK_INTERROGACAO}}}, {{{TK_OU}}}, {{{TK_E}}}, {{{TK_BITWISE_OU}}}, {{{TK_BITWISE_XOU}}}, {{{TK_BITWISE_E}}}, {{{TK_IGUAL}}}, {{{TK_DIFERENTE}}}, {{{TK_MAIOR}}}, {{{TK_MENOR}}}, {{{TK_MAIOR_IGUAL}}}, {{{TK_MENOR_IGUAL}}}, {{{TK_BITWISE_ESQ}}}, {{{TK_BITWISE_DIR}}}, {{{TK_SOMA}}}, {{{TK_SUB}}}, {{{TK_MULT}}}, {{{TK_DIV}}}, {{{TK_RESTO}}}, {{{TK_INCREMENTO}}}, {{{TK_DECREMENTO}}}, {{{TK_INCR_MULT}}}, {{{TK_INCR_DIV}}}, {{{TK_INCR_RESTO}}}, {{{TK_INCR_SOMA}}}, {{{TK_INCR_SUB}}}, {{{TK_BITWISE_COMPL}}}, {{{TK_NEGACAO}}}, \
+{{{TK_VOID, NULL, &tipo}}}, {{{TK_INT, NULL, &tipo}}}, {{{TK_FLOAT, NULL, &tipo}}}, {{{TK_DOUBLE, NULL, &tipo}}}, {{{TK_ID, NULL, &setLex}}}, {{{TK_ABRE_PAR}}}, {{{TK_FECHAR_PAR}}}, {{{TK_PONTO_VIRG}}}, {{{TK_VIRGULA}}}, {{{TK_ATRIB}}}, {{{TK_ABRE_CHAVE, &inicioBloco, NULL}}}, {{{TK_FECHA_CHAVE}}}, {{{TK_WHILE}}}, {{{TK_DO}}}, {{{TK_FOR}}}, {{{TK_RETURN}}}, {{{TK_CONTINUE}}}, {{{TK_BREAK}}}, {{{TK_IF}}}, {{{TK_ELSE}}}, {{{TK_SWITCH}}}, {{{TK_CASE, &inicioBloco, NULL}}}, {{{TK_CONST, NULL, &setConst}}}, {{{TK_DOIS_PONTOS}}}, {{{TK_DEFAULT, &inicioBloco, NULL}}}, {{{TK_INTERROGACAO}}}, {{{TK_OU}}}, {{{TK_E}}}, {{{TK_BITWISE_OU}}}, {{{TK_BITWISE_XOU}}}, {{{TK_BITWISE_E}}}, {{{TK_IGUAL}}}, {{{TK_DIFERENTE}}}, {{{TK_MAIOR}}}, {{{TK_MENOR}}}, {{{TK_MAIOR_IGUAL}}}, {{{TK_MENOR_IGUAL}}}, {{{TK_BITWISE_ESQ}}}, {{{TK_BITWISE_DIR}}}, {{{TK_SOMA}}}, {{{TK_SUB}}}, {{{TK_MULT}}}, {{{TK_DIV}}}, {{{TK_RESTO}}}, {{{TK_INCREMENTO}}}, {{{TK_DECREMENTO}}}, {{{TK_INCR_MULT}}}, {{{TK_INCR_DIV}}}, {{{TK_INCR_RESTO}}}, {{{TK_INCR_SOMA}}}, {{{TK_INCR_SUB}}}, {{{TK_BITWISE_COMPL}}}, {{{TK_NEGACAO}}}, \
 TK_FIM_SENTENCA, E_LINHA, E, INICIO, TIPO, DEFINICAO_FUNCOES, DEFINICAO_FUNCAO, DEFINICAO_FUNCAO_CORPO, DEFINICAO_PARAMETROS, DEFINICAO_PARAMETRO, DEFINICAO_VARIAVEIS, DEFINICAO_VARIAVEL, DEFINICAO_VARIAVEL_LISTA_ID, DEFINICAO_VARIAVEL_ID, COMANDO, COMANDO_BLOCO, COMANDO_LISTA, COMANDO_EXPRESSAO, COMANDO_ITERACAO, COMANDO_ITERACAO_COMANDO_FOR, COMANDO_PULO, COMANDO_CONDICAO, COMANDO_CONDICAO_SWITCH_BLOCO, COMANDO_CONDICAO_LISTA_CASE, COMANDO_CONDICAO_CASE, COMANDO_FUNCAO, CHAMADA_FUNCAO, CHAMADA_FUNCAO_LISTA_PARAM, EXPRESSAO, EXPRESSAO_CONDICIONAL, EXPRESSAO_LOGICA_OU, EXPRESSAO_LOGICA_E, EXPRESSAO_BITABIT_OU, EXPRESSAO_BITABIT_XOU, EXPRESSAO_BITABIT_E, EXPRESSAO_IGUALDADE, EXPRESSAO_RELACIONAL, EXPRESSAO_BITABIT_TROCA, EXPRESSAO_SOMA, EXPRESSAO_MULT, EXPRESSAO_ATRIB, EXPRESSAO_UNARIA, EXPRESSAO_PRIMARIA, OPERADOR_ATRIB, OPERADOR_UNARIO
 
 #define TABELA_SLR \

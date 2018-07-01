@@ -10,6 +10,76 @@
 struct nodoLista *lista;
 struct nodo *pilhaLex;
 struct nodo *pilhaPlace;
+struct nodo *pilhaCod;
+struct nodo *pilhaLbCase;
+char * fimSwitch;
+
+void gravaCod(char * cod) {
+	if (pilhaCod == NULL) {
+		fprintf(arqout, "%s\n", cod);
+	} else {
+		struct nodo *topoCod = peek(&pilhaCod);
+		strcat(cod, "\n");
+		strcat(topoCod->dado._string, cod);
+	}
+}
+
+void geraC3E(char * varAtrib, char * var1, char * op, char * var2) {
+	char * c3e;
+
+	if (op == NULL && var2 == NULL) {
+		c3e = (char *)malloc(sizeof(char) * (strlen(varAtrib) + strlen(var1) + 5));
+		sprintf(c3e, "%s := %s", varAtrib, var1);
+	} else {
+		c3e = (char *)malloc(sizeof(char) * (strlen(varAtrib) + strlen(var1) + strlen(op) + strlen(var2) + 8));
+		sprintf(c3e, "%s := %s %s %s", varAtrib, var1, op, var2);
+	}
+
+	gravaCod(c3e);
+}
+
+void geraC3EControle(int tk, char * cod, char * var1, char * lbFim, char * lbElse, char * lbInicio, char * codTeste) {
+	char * c3e;
+
+	switch (tk) {
+		case TK_IF:
+			if (lbElse == NULL) {
+				c3e = (char *)malloc(sizeof(char) * (strlen(var1) + strlen(cod) + strlen(lbFim) * 2 + 21));
+				sprintf(c3e, "if %s == false goto %s\n%s%s:", var1, lbFim, cod, lbFim);
+			} else {
+				c3e = (char *)malloc(sizeof(char) * (strlen(var1) + strlen(cod) + strlen(lbFim) + strlen(lbElse) + 25));
+				sprintf(c3e, "if %s == false goto %s\n%sgoto %s", var1, lbElse, cod, lbFim);
+			}
+			break;
+		case TK_ELSE:
+			c3e = (char *)malloc(sizeof(char) * (strlen(cod) + strlen(lbFim) + strlen(lbElse) + 4));
+			sprintf(c3e, "%s:\n%s%s:", lbElse, cod, lbFim);
+			break;
+		case TK_WHILE:
+			c3e = (char *)malloc(sizeof(char) * (strlen(lbInicio) * 2 + strlen(var1) + strlen(lbFim) * 2 + strlen(cod) + 28));
+			sprintf(c3e, "%s:\nif %s == false goto %s\n%sgoto %s\n%s", lbInicio, var1, lbFim, cod, lbInicio, lbFim);
+
+			break;
+		case TK_DO:
+			c3e = (char *)malloc(sizeof(char) * (strlen(lbInicio) * 2 + strlen(var1) + strlen(lbFim) * 2 + strlen(cod) + 20));
+			sprintf(c3e, "%s:\n%sif %s == true goto %s", lbInicio, cod, var1, lbInicio);
+
+			break;
+		case TK_SWITCH:
+			c3e = (char *)malloc(sizeof(char) * (strlen(lbInicio) * 2 + strlen(cod) + strlen(codTeste) + strlen(lbFim) + 10));
+			sprintf(c3e, "goto %s\n%s%s:\n%s%s", lbInicio, cod, lbInicio, codTeste, lbFim);
+
+			break;
+		case TK_DEFAULT:
+		case TK_CASE:
+			c3e = (char *)malloc(sizeof(char) * (strlen(lbInicio) + strlen(cod) + strlen(lbFim) + 8));
+			sprintf(c3e, "%s:\n%sgoto %s", lbInicio, cod, lbFim);
+
+			break;
+	}
+
+	gravaCod(c3e);
+}
 
 void empilhaPlace(char * valor) {
 	union dadoNodo dado;
@@ -50,10 +120,17 @@ char * geraTemp() {
 	return temp;
 }
 
-char * geraLabel() {
+char * geraLabel(char * posFix) {
 	static int idLabel = 1;
-	char * label = (char *)malloc(sizeof(char) * (qtdCaract(idLabel) + 2));
-	sprintf(label, "L%d:", idLabel++);
+	char * label;
+
+	if (posFix != NULL) {
+		label = (char *)malloc(sizeof(char) * (strlen(posFix) + qtdCaract(idLabel) + 2));
+		sprintf(label, "L%s%d", posFix, idLabel++);
+	} else {
+		label = (char *)malloc(sizeof(char) * (qtdCaract(idLabel) + 2));
+		sprintf(label, "L%d", idLabel++);
+	}
 
 	return label;
 }
@@ -66,19 +143,18 @@ void geraCodExpressao() {
 	if (x != NULL && y != NULL) {
 		char * temp = geraTemp();
 		empilhaPlace(temp);
-		fprintf(arqout, "%s := %s %s %s\n", temp, x->dado._string, op->dado._string, y->dado._string);
+		geraC3E(temp, x->dado._string, op->dado._string, y->dado._string);
 	}
 }
 
 void geraCodAtribuicao(char * var, int tkGramAtrib) {
 	if (tkGramAtrib == 1) {
 		struct nodo *temp = pop(&pilhaPlace);
-		fprintf(arqout, "%s := %s\n", var, temp->dado._string);
+		geraC3E(var, temp->dado._string, NULL, NULL);
 	} else {
 		struct nodo *incr = pop(&pilhaPlace);
 		struct nodo *op = pop(&pilhaPlace);
-
-		fprintf(arqout, "%s := %s %s %s\n", var, var, op->dado._string, incr->dado._string);
+		geraC3E(var, var, op->dado._string, incr->dado._string);
 	}
 }
 
@@ -103,8 +179,6 @@ void setLex(struct param **sintetizado, struct param paramAux) {
 		union dadoNodo dado;
 		dado._string = (char *)malloc(sizeof(char) * TAMANHO_LEX);
 		strcpy(dado._string, paramAux.lex);
-
-		//printf("EMPILHOU: %s\n", dado._string);
 
 		push(&pilhaLex, dado);
 	}
@@ -137,23 +211,30 @@ void definiciaoVariavelId(struct param *herdado) {
 	addTabSim(nodo->dado._string, herdado->tk);
 
 	if (pilhaPlace == NULL) {
-		fprintf(arqout, "%s := ", nodo->dado._string);
+		char * constTmp = (char *) malloc(sizeof(char) * 25);
 
 		switch (herdado->tk) {
 			case TK_INT:
-				fprintf(arqout, "%d", herdado->valor->i);
+				sprintf(constTmp, "%d", herdado->valor->i);
 				break;
 			case TK_FLOAT:
-				fprintf(arqout, "%.9g", herdado->valor->f);
+				sprintf(constTmp, "%.9g", herdado->valor->f);
 				break;
 			case TK_DOUBLE:
-				fprintf(arqout, "%.17g", herdado->valor->d);
+				sprintf(constTmp, "%.17g", herdado->valor->d);
 				break;
 		}
 
-		fprintf(arqout, "\n");
+		geraC3E(nodo->dado._string, constTmp, NULL, NULL);
 	} else {
 		geraCodAtribuicao(nodo->dado._string, 1);
+	}
+}
+
+void definicaoFuncaoCorpo(struct param *herdado) {
+	struct nodo *nodoCod = pop(&pilhaCod);
+	if (nodoCod != NULL) {
+		gravaCod(nodoCod->dado._string);
 	}
 }
 
@@ -176,7 +257,7 @@ void expressaoPrimariaConst(struct param *herdado) {
 	}
 }
 
-void comandoExpressao(struct param *herdado) {
+void comandoExpressao(struct param **sintetizado, struct param paramAux) {
 	pop(&pilhaLex);
 }
 
@@ -194,15 +275,21 @@ void addTabSim(char *lex, int tkTipo) {
 	}
 }
 
+void inicioBloco(struct param *herdado) {
+	union dadoNodo dado;
+	dado._string = (char *) malloc(sizeof(char) * 1000000);
+	push(&pilhaCod, dado);
+}
+
 void expressaoUnariaIncrDir(struct param **sintetizado, struct param paramAux) {
 	struct nodo *nodo = pop(&pilhaLex);
-	fprintf(arqout, "%s := %s + 1\n", nodo->dado._string, nodo->dado._string);
+	geraC3E(nodo->dado._string, nodo->dado._string, "+", "1");
 	empilhaPlace(nodo->dado._string);
 }
 
 void expressaoUnariaDecrDir(struct param **sintetizado, struct param paramAux) {
 	struct nodo *nodo = pop(&pilhaLex);
-	fprintf(arqout, "%s := %s - 1\n", nodo->dado._string, nodo->dado._string);
+	geraC3E(nodo->dado._string, nodo->dado._string, "-", "1");
 	empilhaPlace(nodo->dado._string);
 }
 
@@ -274,7 +361,7 @@ void expressaoIgualdadeDiferente(struct param **sintetizado, struct param paramA
 }
 
 void expressaoRelacionalMaior(struct param **sintetizado, struct param paramAux) {
-	(*sintetizado)->atrib = 1;
+	(*sintetizado)->atrib = 0;
 	empilhaPlace(">");
 	geraCodExpressao();
 }
@@ -312,6 +399,9 @@ void expressao(struct param *herdado) {
 	}
 }
 
+void operadorAtrib(struct param **sintetizado, struct param paramAux) {
+	(*sintetizado)->atrib = 1;
+}
 
 void operadorAtribIncrMult(struct param **sintetizado, struct param paramAux) {
 	(*sintetizado)->atrib = paramAux.tk;
@@ -336,4 +426,72 @@ void operadorAtribIncrSoma(struct param **sintetizado, struct param paramAux) {
 void operadorAtribIncrSub(struct param **sintetizado, struct param paramAux) {
 	(*sintetizado)->atrib = paramAux.tk;
 	empilhaPlace("-");
+}
+
+void comandoCondicaoIf(struct param *herdado) {
+	struct nodo *nodo = pop(&pilhaPlace);
+	struct nodo *blocoComandosIf = pop(&pilhaCod);
+
+	geraC3EControle(TK_IF, blocoComandosIf->dado._string, nodo->dado._string, geraLabel("fim"), NULL, NULL, NULL);
+}
+
+void comandoCondicaoIfElse(struct param *herdado) {
+	struct nodo *nodo = pop(&pilhaPlace);
+	struct nodo *blocoComandosElse = pop(&pilhaCod);
+	struct nodo *blocoComandosIf = pop(&pilhaCod);
+
+	char * lbElse = geraLabel("else");
+	char * lbFim = geraLabel("fim");
+
+	geraC3EControle(TK_IF, blocoComandosIf->dado._string, nodo->dado._string, lbFim, lbElse, NULL, NULL);
+	geraC3EControle(TK_ELSE, blocoComandosElse->dado._string, NULL, lbFim, lbElse, NULL, NULL);
+}
+
+void comandoCondicaoSwitch(struct param *herdado) {
+	struct nodo *nodo = pop(&pilhaPlace);
+	struct nodo *blocoComandosSwtich = pop(&pilhaCod);
+
+	char * codTeste = (char *) malloc(sizeof(char) * 5000);
+	char * codTmp = (char *) malloc(sizeof(char) * 1000);
+
+	while(pilhaLbCase != NULL) {
+		struct nodo *lbCase = pop(&pilhaLbCase);
+		sprintf(codTmp, "if %s == 1 goto %s\n", nodo->dado._string, lbCase->dado._string);
+		strcat(codTeste, codTmp);
+	}
+
+	geraC3EControle(TK_SWITCH, blocoComandosSwtich->dado._string, NULL, fimSwitch, NULL, geraLabel("teste"), codTeste);
+
+	free(fimSwitch);
+	free(codTeste);
+	free(codTmp);
+	fimSwitch = NULL;
+}
+
+void comandoCondicaoCase(struct param *herdado) {
+	struct nodo *blocoComandosCase = pop(&pilhaCod);
+
+	if (fimSwitch == NULL) {
+		fimSwitch = geraLabel("fim");
+	}
+
+	union dadoNodo dado;
+	dado._string = geraLabel(NULL);
+	push(&pilhaLbCase, dado);
+
+	geraC3EControle(TK_CASE, blocoComandosCase->dado._string, NULL, fimSwitch, NULL, dado._string, NULL);
+}
+
+void comandoIteracaoWhile(struct param *herdado) {
+	struct nodo *nodo = pop(&pilhaPlace);
+	struct nodo *blocoComandosWhile = pop(&pilhaCod);
+
+	geraC3EControle(TK_WHILE, blocoComandosWhile->dado._string, nodo->dado._string, geraLabel("fim"), NULL, geraLabel("inicio"), NULL);
+}
+
+void comandoIteracaoDoWhile(struct param *herdado) {
+	struct nodo *nodo = pop(&pilhaPlace);
+	struct nodo *blocoComandosDo = pop(&pilhaCod);
+
+	geraC3EControle(TK_DO, blocoComandosDo->dado._string, nodo->dado._string, geraLabel("fim"), NULL, geraLabel("inicio"), NULL);
 }

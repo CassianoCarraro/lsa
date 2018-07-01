@@ -136,10 +136,5 @@ int parse(char *lex, char *tk_rec) {
 		}
 	}
 
-	/*printf("Lex\n");
-	mostraPilha(pilhaLex);
-	printf("Place\n");
-	mostraPilha(pilhaPlace);*/
-
 	return reconhece;
 }

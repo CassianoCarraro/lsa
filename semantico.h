@@ -45,6 +45,7 @@ void expressaoRelacionalMaiorIgual(struct param **sintetizado, struct param para
 void expressaoRelacionalMenorIgual(struct param **sintetizado, struct param paramAux);
 void expressaoAtrib(struct param **sintetizado, struct param paramAux);
 
+void operadorAtrib(struct param **sintetizado, struct param paramAux);
 void operadorAtribIncr(struct param **sintetizado, struct param paramAux);
 void operadorAtribIncrMult(struct param **sintetizado, struct param paramAux);
 void operadorAtribIncrDiv(struct param **sintetizado, struct param paramAux);
@@ -54,8 +55,17 @@ void operadorAtribIncrSub(struct param **sintetizado, struct param paramAux);
 void expressao(struct param *herdado);
 
 void definiciaoVariavelId(struct param *herdado);
+void definicaoFuncaoCorpo(struct param *herdado);
 void expressaoPrimaria(struct param *herdado);
 void expressaoPrimariaConst(struct param *herdado);
-void comandoExpressao(struct param *herdado);
+void comandoExpressao(struct param **sintetizado, struct param paramAux);
+void inicioBloco(struct param *herdado);
 
+void comandoCondicaoIf(struct param *herdado);
+void comandoCondicaoIfElse(struct param *herdado);
+void comandoCondicaoSwitch(struct param *herdado);
+void comandoCondicaoCase(struct param *herdado);
+
+void comandoIteracaoWhile(struct param *herdado);
+void comandoIteracaoDoWhile(struct param *herdado);
 #endif
