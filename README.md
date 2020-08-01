@@ -1,4 +1,4 @@
-Simulação de compilador que realiza a análise léxica e sintática de um arquivo fonte em C. O subconjunto da linguagem C reconhecida é:
+Simulação de compilador que realiza a análise léxica e sintática de um arquivo fonte C. O subconjunto da linguagem C reconhecida é:
 - Comando while.
 - Comando do-while.
 - Comando for.
